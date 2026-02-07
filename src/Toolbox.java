@@ -39,12 +39,12 @@ public class Toolbox {
 
     SingleNode current = head;
 
-    while (current != null && current.next != null) {
-        
+    while (current.next != null) {
+        current = current.next;
     }
 
 
-    return null; 
+    return current; 
   }
 
   /**
