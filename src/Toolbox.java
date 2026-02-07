@@ -102,8 +102,15 @@ public class Toolbox {
     if (node == null) {
       throw new IllegalArgumentException("Node cannot be null.");
     }
-    
+   
+  if (node.prev != null) {
+    node.prev.next = node.next;
   }
+
+  if (node.next != null) {
+    node.next.prev = node.prev;
+  }
+}
 
   /**
    * Finds the nth element in a singly linked list.
