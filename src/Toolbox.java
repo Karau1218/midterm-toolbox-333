@@ -240,6 +240,12 @@ public class Toolbox {
       throw new IllegalArgumentException("Queue cannot be null and k cannot be negative.");
     }
     
+    int rotations = k % queue.size();
+
+    for (int i = 0; i < rotations; i++) {
+      // removed the front, add it to the back
+      queue.add(queue.remove());
+    }
   }
 
   /**
