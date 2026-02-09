@@ -1,6 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Stack;
 
 public class Toolbox {
 
@@ -21,7 +22,7 @@ public class Toolbox {
 
     while (current!= null) {
       count++;
-      current = current.next;
+      current = current.next; 
     }
     return count; 
   }
@@ -39,6 +40,7 @@ public class Toolbox {
     }
 
     SingleNode current = head;
+    // if there is a next node, move to it
     while (current.next != null) {
         current = current.next;
     }
@@ -59,6 +61,7 @@ public class Toolbox {
     }
     DoubleNode current = tail;
 
+    // if there is a node behind, move backwords
     while (current.prev!= null) {
       current = current.prev;
     }
@@ -83,7 +86,8 @@ public class Toolbox {
 
     while(current != null) {
       int value = current.data;
-
+      // if theres the value, increase count by 1
+      // if not start its count at 1
       occurrences.put(
         value, occurrences.getOrDefault(value, 0) + 1
       );
@@ -104,11 +108,11 @@ public class Toolbox {
     }
    
   if (node.prev != null) {
-    node.prev.next = node.next;
+    node.prev.next = node.next; //previous person points to next
   }
 
   if (node.next != null) {
-    node.next.prev = node.prev;
+    node.next.prev = node.prev; //next person points to previous
   }
 }
 
@@ -126,9 +130,9 @@ public class Toolbox {
     }
     SingleNode current = head;
     int index = 0;
-      while (current.next != null) {
+      while (current != null) {
         if(index == n) {
-          return current;
+          return current; //the element is found
         }
         current = current.next;
         index++;
@@ -148,8 +152,8 @@ public class Toolbox {
     if (node == null || newNode == null) {
       throw new IllegalArgumentException("Node and newNode cannot be null.");
     }
-    newNode.next = node.next;
-    node.next = newNode;
+    newNode.next = node.next; //new node looks at the next
+    node.next = newNode; //old node looks at the new node
 
   }
 
@@ -175,10 +179,11 @@ public class Toolbox {
 
     SingleNode current = head;
       while (current.next != null && current.next.next != null) {
+        // if the next node is bigger than the node after them
   if (current.next.data > current.next.next.data) {
-      current.next = current.next.next;
+      current.next = current.next.next; // skip them
     } else {
-           current = current.next;
+           current = current.next; // otherwise keep going
     }
   }
   }
@@ -203,17 +208,14 @@ public class Toolbox {
         throw new IllegalArgumentException("Queue cannot be null");
       }
        int size = queue.size();
+       int count = 0; //  counter
 
-  for (int i = 0; i < size; i++) {
-    // Remove the first element
-    int value = queue.remove();
-
-    // Triple the value
-    value *= 3;
-
-    // Add it back to the queue
-    queue.add(value);
-      
+    while (count < size) {
+        int value = queue.remove(); // remove the first element
+        value *= 3; // triple the value
+        queue.add(value); // add it back to the queue
+        
+        count++; 
     }
   }
 
@@ -241,10 +243,11 @@ public class Toolbox {
     }
     
     int rotations = k % queue.size();
+    int count = 0;
 
-    for (int i = 0; i < rotations; i++) {
-      // removed the front, add it to the back
-      queue.add(queue.remove());
+    while (count < rotations) {
+        queue.add(queue.remove()); //      // removed the front, add it to the back
+        count++;
     }
   }
 
@@ -267,9 +270,27 @@ public class Toolbox {
     if (input == null) {
       throw new IllegalArgumentException("Input string cannot be null.");
     }
-    return false;
-  }
+    Stack<Character> stack = new Stack<>();
+    int i = 0; // Start at the first character
 
+    while (i < input.length()) {
+        char c = input.charAt(i);
+
+        if (c == '(') {
+          // Opening parenthesis is pushed
+            stack.push(c);
+        } else if (c == ')') {
+              // Closing parenthesis must match an opening one
+            if (stack.isEmpty()) {
+                return false;
+            }
+            stack.pop();
+        }
+        i++; // Move to the next character index
+    }
+
+  return stack.isEmpty();
+}
   /**
    * Returns the name of the person who has the highest score associated with them in a map.
    * 
@@ -295,6 +316,23 @@ public class Toolbox {
     if (scores == null || scores.isEmpty()) {
       throw new IllegalArgumentException("Scares cannot be null or empty");
     }
-    return null;
+ String bestName = null;
+  int bestScore = Integer.MIN_VALUE;
+
+  // go through the entries
+  for (Map.Entry<String, Integer> entry : scores.entrySet()) {
+    String name = entry.getKey();
+    int score = entry.getValue();
+
+    // Update if score is higher
+    // or if it's tied but lexicographically
+    if (score > bestScore ||
+        (score == bestScore && name.compareTo(bestName) < 0)) {
+      bestScore = score;
+      bestName = name;
+    }
   }
+
+  return bestName;
+}
 }
